@@ -1,48 +1,23 @@
+// router and methods with controller methods referenced.
+
 const express = require('express');
-const Blog = require('../models/blog');
+const blogController = require('../controllers/blogController');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    // keep in mind that it is an array of blogs
-    Blog.find().sort({ createdAt: -1 })
-        .then(result => {
-            res.render('index', { title: 'All blogs', blogs: result });
-        })
-        .catch(err => console.log(err))
-});
+router.get('/', blogController.blog_index);
 
 //create new blog
-router.post('/', (req, res) => {
-    //save a new blog document
-    const blog = new Blog(req.body);
-    blog.save()
-        //you then want to redirect back to /blogs
-        .then(result => res.redirect('/blogs'))
-        .catch(err => console.log(err));
-});
+router.post('/', blogController.blog_create_post);
 
 //put create above ':id' because of '/blog/:id' later on in code thinks that 'create' is an id
-router.get('/create', (req, res) => {
-    res.render('create', { title: 'create new blog' });
-}); 
+//get the page to create a blog
+router.get('/create', blogController.blog_create_get); 
 
 //get single blog
-router.get('/:id', (req, res) => {
-    const id = req.params.id;
-    Blog.findById(id)
-        .then(result => res.render('details', { blog: result, title: 'View blog' }))
-        .catch(err => console.log(err));
-});
+router.get('/:id', blogController.blog_details);
 
-router.delete('/:id', (req, res) => {
-    const id = req.params.id;
-    Blog.findByIdAndDelete(id)
-        //send back json to fron end browser
-        .then(result => {
-            res.json({ redirect: '/blogs' });
-        })
-        .catch(err => console.log(err));
-});
+//delete blog
+router.delete('/:id', blogController.blog_delete);
 
 module.exports = router;
