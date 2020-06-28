@@ -9,6 +9,10 @@ const blogSchema = new Schema({
         type: String,
         required: true
     },
+    author: {
+        type: String,
+        required: true
+    },
     snippets: {
         type: String,
         required: true

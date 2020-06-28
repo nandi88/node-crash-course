@@ -12,6 +12,7 @@
             <% blogs.forEach(blog => { %>
                 <a class="single" href="/blogs/<%= blog._id %>">
                     <h3 class="title"><%= blog.title %></h3>
+                    <p class="author">Written by: <%= blog.author ? blog.author : 'Anonymous' %></p>
                     <p class="snippet"><%= blog.snippets %></p>
                 </a>
             <% }) %>
@@ -23,5 +24,6 @@
     </div>
 
     <%- include('../partials/footer.ejs') %>
+
 </body>
 </html>
