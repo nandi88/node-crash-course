@@ -20,14 +20,12 @@ app.set('view engine', 'ejs');
 
 //middleware on static files
 app.use(express.static('public'));
-//you can just invoke the function
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-//listen for get request
-//render view
+//routes
 app.get('/', (req, res) => {
     res.redirect('/blogs');
-    //res.render('index');
 });
 
 app.get('/about', (req, res) => {
@@ -42,6 +40,34 @@ app.get('/blogs', (req, res) => {
             res.render('index', { title: 'All blogs', blogs: result });
         })
         .catch(err => console.log(err))
+});
+
+//create new blog
+app.post('/blogs', (req, res) => {
+    //save a new blog document
+    const blog = new Blog(req.body);
+    blog.save()
+        //you then want to redirect back to /blogs
+        .then(result => res.redirect('/blogs'))
+        .catch(err => console.log(err));
+});
+
+//get single blog
+app.get('/blogs/:id', (req, res) => {
+    const id = req.params.id;
+    Blog.findById(id)
+        .then(result => res.render('details', { blog: result, title: 'View blog' }))
+        .catch(err => console.log(err));
+});
+
+app.delete('/blogs/:id', (req, res) => {
+    const id = req.params.id;
+    Blog.findByIdAndDelete(id)
+        //send back json to fron end browser
+        .then(result => {
+            res.json({ redirect: '/blogs' });
+        })
+        .catch(err => console.log(err));
 });
 
 app.get('/blogs/create', (req, res) => {
