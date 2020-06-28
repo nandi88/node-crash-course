@@ -6,12 +6,13 @@ const Blog = require('./models/blog');
 
 //set up express app and invoke express and stor in app const
 const app = express();
+app.listen(3000)
+// //connect to mongodb
+const bdURI = 'mongodb+srv://netninja:scientist@nodetuts-6iczn.mongodb.net/node-tuts?retryWrites=true&w=majority';
 
-
-
-//deprecation warning so add 2nd parameter
+// //deprecation warning so add 2nd parameter
 mongoose.connect(bdURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(result => app.listen(3000))
+    .then(result => app.listen(8080))
     .catch(err => console.log(err));
 
 //set up view engine
@@ -26,6 +27,7 @@ app.use(morgan('dev'));
 //render view
 app.get('/', (req, res) => {
     res.redirect('/blogs');
+    //res.render('index');
 });
 
 app.get('/about', (req, res) => {
