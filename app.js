@@ -2,7 +2,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const Blog = require('./models/blog');
+const blogRoutes = require('./routes/blogRoutes');
 
 //set up express app and invoke express and stor in app const
 const app = express();
@@ -33,46 +33,8 @@ app.get('/about', (req, res) => {
 });
 
 //blog routes
-app.get('/blogs/create', (req, res) => {
-    res.render('create', { title: 'create new blog' });
-});
-
-app.get('/blogs', (req, res) => {
-    // keep in mind that it is an array of blogs
-    Blog.find().sort({ createdAt: -1 })
-        .then(result => {
-            res.render('index', { title: 'All blogs', blogs: result });
-        })
-        .catch(err => console.log(err))
-});
-
-//create new blog
-app.post('/blogs', (req, res) => {
-    //save a new blog document
-    const blog = new Blog(req.body);
-    blog.save()
-        //you then want to redirect back to /blogs
-        .then(result => res.redirect('/blogs'))
-        .catch(err => console.log(err));
-});
-
-//get single blog
-app.get('/blogs/:id', (req, res) => {
-    const id = req.params.id;
-    Blog.findById(id)
-        .then(result => res.render('details', { blog: result, title: 'View blog' }))
-        .catch(err => console.log(err));
-});
-
-app.delete('/blogs/:id', (req, res) => {
-    const id = req.params.id;
-    Blog.findByIdAndDelete(id)
-        //send back json to fron end browser
-        .then(result => {
-            res.json({ redirect: '/blogs' });
-        })
-        .catch(err => console.log(err));
-});
+//scope out the /blog and then remove /blog in all routes. It makes it easier if you want to change url later on
+app.use('/blogs', blogRoutes);
 
 //404 must be last
 app.use((req, res) => {
