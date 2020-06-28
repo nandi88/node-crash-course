@@ -33,6 +33,10 @@ app.get('/about', (req, res) => {
 });
 
 //blog routes
+app.get('/blogs/create', (req, res) => {
+    res.render('create', { title: 'create new blog' });
+});
+
 app.get('/blogs', (req, res) => {
     // keep in mind that it is an array of blogs
     Blog.find().sort({ createdAt: -1 })
@@ -68,10 +72,6 @@ app.delete('/blogs/:id', (req, res) => {
             res.json({ redirect: '/blogs' });
         })
         .catch(err => console.log(err));
-});
-
-app.get('/blogs/create', (req, res) => {
-    res.render('create', { title: 'create new blog' });
 });
 
 //404 must be last
