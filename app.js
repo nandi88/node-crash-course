@@ -3,6 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const blogRoutes = require('./routes/blogRoutes');
+const commentRoutes = require('./routes/commentRoutes');
 
 //set up express app and invoke express and stor in app const
 const app = express();
@@ -35,6 +36,7 @@ app.get('/about', (req, res) => {
 //blog routes
 //scope out the /blog and then remove /blog in all routes. It makes it easier if you want to change url later on
 app.use('/blogs', blogRoutes);
+app.use('/blogs', commentRoutes);
 
 //404 must be last
 app.use((req, res) => {

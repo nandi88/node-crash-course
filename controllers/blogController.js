@@ -43,7 +43,6 @@ const blog_delete = (req, res) => {
         .catch(err => console.log(err));
 }
 
-
 //controller methods
 module.exports = {
     blog_index,
